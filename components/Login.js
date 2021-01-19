@@ -1,11 +1,7 @@
 import * as React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Button, Overlay } from 'react-native-elements';
+import { Button, Overlay, Input } from 'react-native-elements';
 
-import Icon from 'react-native-vector-icons/FontAwesome';
-import { Input } from 'react-native-elements';
-
-import { NavigationContainer, navigation } from '@react-navigation/native';
 
 export default class Login extends React.Component {
     constructor(props) {
