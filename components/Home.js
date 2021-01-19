@@ -1,90 +1,114 @@
 import * as React from 'react';
 import { Button, View, Text } from 'react-native';
 import * as SQLite from 'expo-sqlite';
-const db = SQLite.openDatabase('gao.db');
-import { Input, Overlay } from 'react-native-elements';
-import AddOrdinateur from './addOrdinateur.js';
+import sequelize from '../config/database.js';
+
+import Client from '../models/Client.js';
+import Ordinateur from '../models/Ordinateur.js';
+
+// const db = SQLite.openDatabase('gao.db');
+
 
 export default class HomeScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state ={
-            data: null,
+            dataOrdi: null,
             dataClients: null,
             ordinateurName : "",
             isVisible: false
         }
-        db.transaction(tx => {
-            tx.executeSql(
-                'CREATE TABLE IF NOT EXISTS ordinateurs (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)'
-            )
-        })
 
-        db.transaction(tx => {
-            tx.executeSql(
-                'CREATE TABLE IF NOT EXISTS clients (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, surname TEXT)'
-            )
-        })
+        async function init() {
+            try {
+                await sequelize.sync({
+                    // force: true
+                });
 
-        // db.transaction(tx => {
-        //     tx.executeSql(
-        //         'DROP TABLE users'
-        //     )
-        // })
+                const clientExist = await Client.findOne({where: {
+                    name: 'DOE',
+                    surname: 'John',
+                }});
+
+                if (!clientExist) {
+                    await Client.create({
+                        name: 'DOE',
+                        surname: 'John'
+                    });
+
+                    await Client.create({
+                        name: 'ABRADOR',
+                        surname: 'Daryl'
+                    });
+                }
+               
+                const ordinateurExist = await Ordinateur.findOne({
+                    where: {
+                        name: 'Ordinateur 1'
+                    }
+                });
+
+                if(!ordinateurExist) {
+                    await Ordinateur.create({
+                        name: 'Ordinateur 1'
+                    });
+                    await Ordinateur.create({
+                        name: 'Ordinateur 2'
+                    });
+                }
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        init();
     }
 
     componentDidMount() {
-        console.log('monted')
         this.fetchDataOrdi();
         this.fetchDataClients();
     }
 
 
-    fetchDataOrdi() {
-        var arrayData = [];
-        db.transaction(tx => {
-            // sending 4 arguments in executeSql
-            tx.executeSql('SELECT * FROM ordinateurs', null, // passing sql query and parameters:null
-                // success callback which sends two things Transaction object and ResultSet Object
-                (_, resultat ) => {
-                    for(let i = 0; i < resultat.rows.length; i++){
-                        arrayData.push(resultat.rows.item(i))
-                    }
-                    this.setState({ data: arrayData })
-                },
-                // failure callback which sends two things Transaction object and Error
-                (_, error) => console.log('Error ', error)
-            ) // end executeSQL
-        }) // end transaction
+    async fetchDataOrdi() {
+        try {
+            var arrayData = [];
+            const ordinateurData = await Ordinateur.findAll({});
+            ordinateurData.forEach(data => {
+                let infoData = data.dataValues;
+                arrayData.push(infoData)
+            })
+            await this.setState({ dataOrdi: arrayData})
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    
+    
+    async fetchDataClients() {
+        try {
+            var arrayData = [];
+            const clientData = await Client.findAll({});
+            clientData.forEach(data => {
+                let infoData = data.dataValues;
+                arrayData.push(infoData)
+            })
+            await this.setState({ dataClients: arrayData })
+        } catch (error) {
+            console.log(error)
+        }
     }
 
-    fetchDataClients() {
-        var arrayData = [];
-        db.transaction(tx => {
-            // sending 4 arguments in executeSql
-            tx.executeSql('SELECT * FROM clients', null, // passing sql query and parameters:null
-                // success callback which sends two things Transaction object and ResultSet Object
-                (_, resultat) => {
-                    for (let i = 0; i < resultat.rows.length; i++) {
-                        arrayData.push(resultat.rows.item(i))
-                    }
-                    this.setState({ dataClients: arrayData })
-                },
-                // failure callback which sends two things Transaction object and Error
-                (_, error) => console.log('Error ', error)
-            ) // end executeSQL
-        }) // end transaction
-    }
 
     render() {
         this.fetchDataOrdi();
         this.fetchDataClients();
-
         return(
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                 
                 <h3> Ordinateurs </h3>
-                { this.state.data && this.state.data.map((_data, index) => (
+                { this.state.dataOrdi && this.state.dataOrdi.map((_data, index) => (
                         <Text key={index}> {_data.name} </Text>
                         )
                     )
