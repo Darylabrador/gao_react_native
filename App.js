@@ -7,6 +7,8 @@ import './css/app.css';
 
 import HomeScreen from './components/Home.js';
 import Login from './components/Login.js';
+import AddOrdinateur from './components/addOrdinateur.js';
+import AddClient from './components/addUser.js';
 
 const Stack = createStackNavigator();
 
@@ -20,6 +22,8 @@ export default class App extends React.Component {
         <Stack.Navigator>
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="AddOrdi" component={AddOrdinateur} />
+          <Stack.Screen name="AddClient" component={AddClient} />
         </Stack.Navigator>
       </NavigationContainer>
     )
