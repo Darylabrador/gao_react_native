@@ -1,12 +1,9 @@
 import * as React from 'react';
 import { Button, View, Text } from 'react-native';
-import * as SQLite from 'expo-sqlite';
 import sequelize from '../config/database.js';
 
 import Client from '../models/Client.js';
 import Ordinateur from '../models/Ordinateur.js';
-
-// const db = SQLite.openDatabase('gao.db');
 
 
 export default class HomeScreen extends React.Component {
@@ -107,14 +104,14 @@ export default class HomeScreen extends React.Component {
         return(
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                 
-                <h3> Ordinateurs </h3>
+                <Text> --- Liste des ordinateurs --- </Text>
                 { this.state.dataOrdi && this.state.dataOrdi.map((_data, index) => (
                         <Text key={index}> {_data.name} </Text>
                         )
                     )
                 }
         
-                <h3> Clients </h3>
+                <Text> --- Listes des clients --- </Text>
                 { this.state.dataClients && this.state.dataClients.map((_data, index) => (
                         <Text key={index}> {_data.name}  {_data.surname}</Text>
                         )
@@ -122,8 +119,7 @@ export default class HomeScreen extends React.Component {
                 }
 
 
-                <h3> Actions </h3>
-
+                <Text> --- Les actions --- </Text>
                 <Button
                     title="Se connecter"
                     onPress={() => this.props.navigation.navigate('Login')}

@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { View, Text } from 'react-native';
 import { Button, Overlay, Input } from 'react-native-elements';
-import * as SQLite from 'expo-sqlite';
-const db = SQLite.openDatabase('gao.db');
+import Client from '../models/Client.js';
 
 export default class AddClient extends React.Component {
     constructor(props) {
@@ -26,17 +25,18 @@ export default class AddClient extends React.Component {
         await this.setState({ surname: event.target.value });
     }
 
-    addData() {
-        if (this.state.ordinateurName != "") {
-
-            db.transaction(tx => {
-                tx.executeSql(
-                    'INSERT INTO clients (name, surname) values (?, ?)', [this.state.name, this.state.surname],
-                    (txObj, resultSet) => console.log(resultSet),
-                    (txObj, error) => console.log('Error', error))
-            })
-            this.props.navigation.navigate('Home')
-            this.setState({ name: "", surname: ""})
+    async addData() {
+        try {
+            if (this.state.name != "" && this.state.surname != "") {
+                await Client.create({
+                    name: this.state.name,
+                    surname: this.state.surname
+                });
+                this.props.navigation.navigate('Home')
+                this.setState({ name: "", surname: "" })
+            }
+        } catch (error) {
+            console.log(error)
         }
     }
 

@@ -43,20 +43,10 @@ export default class Login extends React.Component {
 
     render() {
         return(
-            <View>
-                <div className="loginContainer">
-                    <form onSubmit={this.handleSubmit} className="loginForm">
-                        <h3> Bienvenue sur l'espace culturel </h3>
-                        <Input placeholder="email@address.com" type="email" value={this.state.email} onChange={this.handleChangeEmail} className="loginInput" />
-                        <Input placeholder="Password" secureTextEntry={true} value={this.state.password} onChange={this.handleChangePassword} className="loginInput" />
-                        <div className="btnLoginContainer">
-                            <Button
-                                title="Se connecter"
-                                onPress={() => this.props.navigation.navigate('Home')}
-                            />
-                        </div>
-                    </form>
-                </div>
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <Input placeholder="email@address.com" type="email" value={this.state.email} onChange={this.handleChangeEmail} />
+                <Input placeholder="Password" secureTextEntry={true} value={this.state.password} onChange={this.handleChangePassword} />
+                <Button title="Se connecter" onPress={() => this.props.navigation.navigate('Home')}/>   
             </View>
         )
     }

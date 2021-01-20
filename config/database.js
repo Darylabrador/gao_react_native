@@ -1,7 +1,7 @@
 import * as SQLite from 'expo-sqlite';
 import Sequelize from "rn-sequelize";
 
-const  sequelize = new Sequelize({
+const sequelize = new Sequelize({
     dialectModule: SQLite,
     database: "mydb",
     dialectOptions: {

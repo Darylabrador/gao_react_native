@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { View, Text } from 'react-native';
 import { Button, Overlay, Input } from 'react-native-elements';
-import * as SQLite from 'expo-sqlite';
-const db = SQLite.openDatabase('gao.db');
+import Ordinateur from '../models/Ordinateur.js';
 
 export default class AddOrdinateur extends React.Component {
     constructor(props) {
@@ -26,17 +25,17 @@ export default class AddOrdinateur extends React.Component {
         await this.setState({ isVisible: !this.state.isVisible });
     }
 
-    addData() {
-        if(this.state.ordinateurName != ""){
-
-            db.transaction(tx => {
-                tx.executeSql(
-                    'INSERT INTO ordinateurs (name) values (?)', [this.state.ordinateurName],
-                    (txObj, resultSet) => console.log(resultSet),
-                    (txObj, error) => console.log('Error', error))
-            })
-            this.props.navigation.navigate('Home')
-            this.setState({ ordinateurName: "" })
+    async addData() {
+        try {
+            if (this.state.ordinateurName != "") {
+                await Ordinateur.create({
+                    name: this.state.ordinateurName
+                });
+                this.props.navigation.navigate('Home')
+                this.setState({ ordinateurName: "" })
+            }
+        } catch (error) {
+            console.log(error)
         }
     }
 
