@@ -4,9 +4,9 @@ import sequelize from '../config/database.js';
 const Op = Sequelize.Op;
 const Model = Sequelize.Model;
 
-export default class Client extends Model { }
+export default class Attribution extends Model { }
 
-Client.init(
+Attribution.init(
     {
         id: {
             type: Sequelize.INTEGER,
@@ -14,17 +14,25 @@ Client.init(
             allowNull: false,
             primaryKey: true
         },
-        surname: {
-            type: Sequelize.STRING,
+        clientId: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+        },
+        desktopId: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+        },
+        date: {
+            type: Sequelize.DATEONLY,
             allowNull: false
         },
-        name: {
+        hours: {
             type: Sequelize.STRING,
             allowNull: false
         }
     },
     {
         sequelize,
-        modelName: "client"
+        modelName: "attribution"
     }
 );

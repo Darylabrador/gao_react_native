@@ -8,10 +8,21 @@ export default class Ordinateur extends Model { }
 
 Ordinateur.init(
     {
-        name: Sequelize.STRING
+        id: {
+            type: Sequelize.INTEGER,
+            autoIncrement: true,
+            allowNull: false,
+            primaryKey: true
+        },
+        name: {
+            type: Sequelize.STRING,
+            allowNull: false,
+            unique: true
+        }
     },
     {
         sequelize,
+        paranoid: true,
         modelName: "ordinateur"
     }
 );

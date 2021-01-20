@@ -4,9 +4,9 @@ import sequelize from '../config/database.js';
 const Op = Sequelize.Op;
 const Model = Sequelize.Model;
 
-export default class Client extends Model { }
+export default class User extends Model { }
 
-Client.init(
+User.init(
     {
         id: {
             type: Sequelize.INTEGER,
@@ -14,17 +14,19 @@ Client.init(
             allowNull: false,
             primaryKey: true
         },
-        surname: {
+        email: {
             type: Sequelize.STRING,
-            allowNull: false
+            allowNull: false,
+            unique: true
         },
-        name: {
-            type: Sequelize.STRING,
-            allowNull: false
+        password: {
+            type: Sequelize.TEXT,
+            allowNull: false,
+            unique: true
         }
     },
     {
         sequelize,
-        modelName: "client"
+        modelName: "user"
     }
 );

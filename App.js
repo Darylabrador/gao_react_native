@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import './css/app.css';
+// import './css/app.css';
 
 import HomeScreen from './components/Home.js';
 import Login from './components/Login.js';

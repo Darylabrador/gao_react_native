@@ -8,7 +8,8 @@ const  sequelize = new Sequelize({
         version: "1.0",
         description: "Test DB"
         //size: 2 * 1024 * 1024
-    }
+    },
+    logging: false
 });
 
 export default sequelize;
