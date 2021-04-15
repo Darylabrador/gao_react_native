@@ -18,11 +18,11 @@ export default class AddClient extends React.Component {
     }
 
     async handleChangeName(event) {
-        await this.setState({ name: event.target.value });
+        await this.setState({ name: event });
     }
 
     async handleChangeSurname(event) {
-        await this.setState({ surname: event.target.value });
+        await this.setState({ surname: event });
     }
 
     async addData() {
@@ -44,8 +44,8 @@ export default class AddClient extends React.Component {
         return (
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 
-                <Input placeholder="Nom du client" type="text" value={this.state.name} onChange={this.handleChangeName} />
-                <Input placeholder="Prénom du client" type="text" value={this.state.surname} onChange={this.handleChangeSurname} />
+                <Input placeholder="Nom du client" type="text" value={this.state.name} onChangeText={this.handleChangeName} />
+                <Input placeholder="Prénom du client" type="text" value={this.state.surname} onChangeText={this.handleChangeSurname} />
                 <Button
                     title="ajouter un client"
                     onPress={this.addData}

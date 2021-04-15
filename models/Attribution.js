@@ -8,28 +8,10 @@ export default class Attribution extends Model { }
 
 Attribution.init(
     {
-        id: {
-            type: Sequelize.INTEGER,
-            autoIncrement: true,
-            allowNull: false,
-            primaryKey: true
-        },
-        clientId: {
-            type: Sequelize.INTEGER,
-            allowNull: false,
-        },
-        desktopId: {
-            type: Sequelize.INTEGER,
-            allowNull: false,
-        },
-        date: {
-            type: Sequelize.DATEONLY,
-            allowNull: false
-        },
-        hours: {
-            type: Sequelize.STRING,
-            allowNull: false
-        }
+        clientId: Sequelize.INTEGER,
+        desktopId: Sequelize.INTEGER,
+        date:  Sequelize.DATEONLY,
+        hours: Sequelize.STRING,
     },
     {
         sequelize,

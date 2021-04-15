@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { Button, View, Text } from 'react-native';
+import Sequelize from "rn-sequelize";
 import sequelize from '../config/database.js';
 
 import Client from '../models/Client.js';
 import Ordinateur from '../models/Ordinateur.js';
+
 
 
 export default class HomeScreen extends React.Component {
@@ -18,6 +20,51 @@ export default class HomeScreen extends React.Component {
 
         async function init() {
             try {
+
+                Client.init(
+                    {
+                        id: {
+                            type: Sequelize.INTEGER,
+                            autoIncrement: true,
+                            allowNull: false,
+                            primaryKey: true
+                        },
+                        surname: {
+                            type: Sequelize.STRING,
+                            allowNull: false
+                        },
+                        name: {
+                            type: Sequelize.STRING,
+                            allowNull: false
+                        }
+                    },
+                    {
+                        sequelize,
+                        modelName: "client"
+                    }
+                );
+
+                Ordinateur.init(
+                    {
+                        id: {
+                            type: Sequelize.INTEGER,
+                            autoIncrement: true,
+                            allowNull: false,
+                            primaryKey: true
+                        },
+                        name: {
+                            type: Sequelize.STRING,
+                            allowNull: false,
+                            unique: true
+                        }
+                    },
+                    {
+                        sequelize,
+                        paranoid: true,
+                        modelName: "ordinateur"
+                    }
+                );
+
                 await sequelize.sync({
                     // force: true
                 });
@@ -117,7 +164,6 @@ export default class HomeScreen extends React.Component {
                         )
                     )
                 }
-
 
                 <Text> --- Les actions --- </Text>
                 <Button

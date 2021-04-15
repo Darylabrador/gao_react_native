@@ -17,8 +17,8 @@ export default class AddOrdinateur extends React.Component {
         this.addData = this.addData.bind(this);
     }
 
-    async handleChangeOrdinateurName(event) {
-        await this.setState({ ordinateurName: event.target.value });
+    handleChangeOrdinateurName(event) {
+        this.setState({ ordinateurName: event });
     }
 
     async toggleOverlay(event) {
@@ -28,11 +28,11 @@ export default class AddOrdinateur extends React.Component {
     async addData() {
         try {
             if (this.state.ordinateurName != "") {
-                await Ordinateur.create({
-                    name: this.state.ordinateurName
-                });
+                let newOrdi = new Ordinateur()
+                newOrdi.name = this.state.ordinateurName;
+                await newOrdi.save()
+                await this.setState({ ordinateurName: "" })
                 this.props.navigation.navigate('Home')
-                this.setState({ ordinateurName: "" })
             }
         } catch (error) {
             console.log(error)
@@ -43,7 +43,7 @@ export default class AddOrdinateur extends React.Component {
         return(
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
            
-                <Input placeholder="Nom de l'ordinateur" type="text" value={this.state.ordinateurName} onChange={this.handleChangeOrdinateurName} />
+                <Input placeholder="Nom de l'ordinateur" type="text" value={this.state.ordinateurName} onChangeText={this.handleChangeOrdinateurName} />
                 <Button
                     title="ajouter un ordinateur"
                     onPress={this.addData}
