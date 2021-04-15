@@ -1,57 +1,38 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import { Button, Overlay, Input } from 'react-native-elements';
 import Client from '../models/Client.js';
 
-export default class AddClient extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            data: null,
-            name: "",
-            surname: "",
-        }
+export default AddClient = ({ navigation }) => {
+    const [name, setName] = useState("");
+    const [surname, setSurname] = useState("");
 
-        this.handleChangeName = this.handleChangeName.bind(this);
-        this.handleChangeSurname = this.handleChangeSurname.bind(this);
-        this.addData = this.addData.bind(this);
+    const onChangeName = (value) => {
+        setName(value)
     }
 
-    async handleChangeName(event) {
-        await this.setState({ name: event });
+    const onChangeSurname = (value) => {
+        setSurname(value)
     }
 
-    async handleChangeSurname(event) {
-        await this.setState({ surname: event });
-    }
-
-    async addData() {
+    const addData = async () => {
         try {
-            if (this.state.name != "" && this.state.surname != "") {
-                await Client.create({
-                    name: this.state.name,
-                    surname: this.state.surname
-                });
-                this.props.navigation.navigate('Home')
-                this.setState({ name: "", surname: "" })
+            if (name != "" && surname != "") {
+                await Client.create({ name,surname });
+                navigation.navigate('Home')
+                setName('')
+                setSurname('')
             }
         } catch (error) {
             console.log(error)
         }
     }
 
-    render() {
-        return (
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-
-                <Input placeholder="Nom du client" type="text" value={this.state.name} onChangeText={this.handleChangeName} />
-                <Input placeholder="Prénom du client" type="text" value={this.state.surname} onChangeText={this.handleChangeSurname} />
-                <Button
-                    title="ajouter un client"
-                    onPress={this.addData}
-                />
-
-            </View>
-        )
-    }
+    return (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Input placeholder="Nom du client" type="text" value={name} onChangeText={text => onChangeName(text)} />
+            <Input placeholder="Prénom du client" type="text" value={surname} onChangeText={text => onChangeSurname(text)} />
+            <Button title="ajouter un client" onPress={() => addData()} />
+        </View>
+    )
 }
