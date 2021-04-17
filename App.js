@@ -1,28 +1,19 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import HomeScreen from './components/Home.js';
-import Login from './components/Login.js';
-import AddOrdinateur from './components/addOrdinateur.js';
-import AddClient from './components/addUser.js';
+import HomeScreen from './screens/Home';
+import Login from './screens/Login';
 
-const Stack = createStackNavigator();
+export default App = props => {
+  const Stack = createStackNavigator();
 
-export default class App extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-  render() {
-    return (
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="AddOrdi" component={AddOrdinateur} />
-          <Stack.Screen name="AddClient" component={AddClient} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    )
-  }
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Espace culturel" component={Login} />
+        <Stack.Screen name="Accueil" component={HomeScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  )
 }

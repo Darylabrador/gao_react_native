@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Button, View, Text } from 'react-native';
+import { Button, View, Text, StyleSheet } from 'react-native';
+
 import Sequelize from "rn-sequelize";
 import sequelize from '../config/database.js';
 
@@ -142,37 +143,17 @@ export default HomeScreen = ({ navigation }) => {
     return(
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 
-            <Text> --- Liste des ordinateurs --- </Text>
-            { dataOrdi && dataOrdi.map((_data, index) => (
-                    <Text key={index}> {_data.name} </Text>
-                    )
-                )
-            }
 
-            <Text> --- Listes des clients --- </Text>
-            { dataClients && dataClients.map((_data, index) => (
-                    <Text key={index}> {_data.name}  {_data.surname}</Text>
-                    )
-                )
-            }
-
-            <Text> --- Les actions --- </Text>
-            <Button
-                title="Se connecter"
-                onPress={() => navigation.navigate('Login')}
-            />
-
-
-            <Button
-                title="Ajouter un ordinateur"
-                onPress={() => navigation.navigate('AddOrdi')}
-            />
-
-
-            <Button
-                title="Ajouter un client"
-                onPress={() => navigation.navigate('AddClient')}
-            />
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    listItem: {
+        padding: 10,
+        marginVertical: 10,
+        backgroundColor: '#ccc',
+        borderColor: 'black',
+        borderWidth: 1,
+    }
+});
