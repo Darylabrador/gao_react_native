@@ -5,7 +5,6 @@ const Op = Sequelize.Op;
 const Model = Sequelize.Model;
 
 export default class User extends Model { }
-
 User.init(
     {
         id: {

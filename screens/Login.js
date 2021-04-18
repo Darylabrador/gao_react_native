@@ -2,6 +2,43 @@ import React, { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 
+// Import for database
+import * as SQLite from 'expo-sqlite';
+import Sequelize from "rn-sequelize";
+const Op = Sequelize.Op;
+const Model = Sequelize.Model;
+
+// Initialisation for database configuration
+const sequelize = new Sequelize({
+    dialectModule: SQLite,
+    database: "mydb",
+    dialectOptions: {
+        version: "1.0",
+        description: "Test DB"
+        //size: 2 * 1024 * 1024
+    }
+});
+
+class User extends Model { }
+User.init(
+    {
+        email: {
+            type: Sequelize.STRING,
+            allowNull: false,
+            unique: true
+        },
+        password: {
+            type: Sequelize.TEXT,
+            allowNull: false,
+            unique: true
+        }
+    },
+    {
+        sequelize,
+        modelName: "user"
+    }
+);
+
 export default Login = ({ navigation }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -14,7 +51,17 @@ export default Login = ({ navigation }) => {
         setPassword(value)
     }
 
-    const loginHandler = () => {
+    const loginHandler = async () => {
+        const userExist = await User.findOne({ where: { email } });
+        if (!userExist) {
+            console.log('identifiants invalide')
+        }
+
+        const isEqual = password == userExist.password ? true : false;
+        if (!isEqual) {
+            console.log('identifiants invalide')
+        }
+
         setEmail("")
         setPassword("")
         navigation.navigate('Accueil')

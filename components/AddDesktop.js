@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Button, Overlay, Input, Icon } from 'react-native-elements';
+import { View, Text, StyleSheet, LogBox, Button  } from 'react-native';
+import { Overlay, Input, Icon } from 'react-native-elements';
 
-export default addDesktop = () => {
+export default addDesktop = props => {
     const [visible, setVisible]           = useState(false);
     const [addedDesktop, setAddedDesktop] = useState("");
     const [isEnabled, setIsEnabled]       = useState(false);
@@ -21,8 +21,9 @@ export default addDesktop = () => {
     }
 
     const addDesktopHandler = () => {
-        setAddedDesktop("")
         setVisible(!visible);
+        props.addDesktop(addedDesktop)
+        setAddedDesktop("");
     }
 
     return (
@@ -31,28 +32,30 @@ export default addDesktop = () => {
                 <Button title="+" onPress={toggleOverlay} />
             </View>
             <Overlay isVisible={visible} overlayStyle={styles.modal}>
-                <View style={styles.headerCard}>
-                    <Text style={{ fontWeight: 'bold' }}> Ajouter un ordinateur</Text>
-                    <View style={{ width: 50 }}>
-                        <Button
-                            title="X"
-                            titleStyle={styles.titleClose}
-                            buttonStyle={styles.buttonClose }
-                            onPress={toggleOverlay}
-                        />
+                <View>
+                    <View style={styles.headerCard}>
+                        <Text style={{ fontWeight: 'bold' }}> Ajouter un ordinateur</Text>
+                        <View style={{ width: 50 }}>
+                            <Button
+                                title="X"
+                                titleStyle={styles.titleClose}
+                                buttonStyle={styles.buttonClose}
+                                onPress={toggleOverlay}
+                            />
+                        </View>
                     </View>
-                </View>
-                
-                <Input 
-                    placeholder="Saisir le nom du poste" 
-                    type="text" value={addedDesktop} 
-                    onChangeText={onChangeAddedDesktop} 
-                    containerStyle={styles.inputContainer}
-                />
 
-                <View style={styles.buttonContainer}>
-                    <Button title="Annuler" onPress={toggleOverlay} buttonStyle={styles.buttonLeft} />
-                    <Button title="Valider" onPress={addDesktopHandler} disabled={!isEnabled} />
+                    <Input
+                        placeholder="Saisir le nom du poste"
+                        type="text" value={addedDesktop}
+                        onChangeText={onChangeAddedDesktop}
+                        containerStyle={styles.inputContainer}
+                    />
+
+                    <View style={styles.buttonContainer}>
+                        <Button title="Annuler" onPress={toggleOverlay} buttonStyle={styles.buttonLeft} />
+                        <Button title="Valider" onPress={addDesktopHandler} disabled={!isEnabled} />
+                    </View>
                 </View>
             </Overlay>
         </View>
@@ -69,7 +72,7 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     buttonAddIcon: {
-        width: 30
+        width: 30,
     },
     modal: { 
         marginLeft: 10, 
@@ -83,17 +86,16 @@ const styles = StyleSheet.create({
         color: 'black'
     },
     inputContainer:{
-        width: 250,
+        width: 280,
         marginBottom: 5,
         marginTop: 10
     },
     buttonContainer: {
         flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center'
+        justifyContent: 'space-around',
+        alignItems: 'center',
     },
     buttonLeft: {
-        marginRight: 10,
         backgroundColor: 'grey'
     }
 });
