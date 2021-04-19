@@ -89,7 +89,7 @@ Attribution.belongsTo(Client);
 Attribution.belongsTo(Ordinateur);
 
 export default HomeScreen = ({ navigation }) => {
-    const [dataOrdi, setDataOrdi]       = useState([]);
+    const [dataOrdi, setDataOrdi]    = useState([]);
     const [pagination, setPagination] = useState({});
     const [date, setDate] = useState(new Date());
     const [mounted, setMounted] = useState(false);
@@ -166,6 +166,17 @@ export default HomeScreen = ({ navigation }) => {
         }
     }
 
+    const editDesktopHandler = async (ordiId, name) => {
+        try {
+            const desktopInfo = await Ordinateur.findByPk(ordiId);
+            desktopInfo.name = name;
+            await desktopInfo.save();
+            await getComputers(date);
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const deleteDesktopHandler = async (ordiId) => {
         try {
             await setDataOrdi(currentData => {
@@ -180,6 +191,7 @@ export default HomeScreen = ({ navigation }) => {
 
     useEffect(() => {
         if(!mounted){
+            setDataOrdi([]);
             getComputers(date);
             setMounted(true);
         }
@@ -208,7 +220,7 @@ export default HomeScreen = ({ navigation }) => {
             </View>
             <FlatList 
                 data={dataOrdi}
-                renderItem={itemData => (<Desktop attributions={itemData} onDelete={deleteDesktopHandler} />)}
+                renderItem={itemData => (<Desktop attributions={itemData} onDelete={deleteDesktopHandler} onEdit={editDesktopHandler} />)}
                 keyExtractor={(item, index) => item.id.toString()}
             />
 
