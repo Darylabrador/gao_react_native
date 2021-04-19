@@ -4,6 +4,10 @@ import { Overlay, Input, Icon, Card} from 'react-native-elements';
 
 export default Desktop = props => {
 
+    const deleteDesktop = () => {
+        props.onDelete(props.attributions.item.id)
+    }
+
     useEffect(() => {
         const showData = () => {
             console.log(props.attributions)
@@ -17,11 +21,11 @@ export default Desktop = props => {
                 <View style={ styles.headerCard }> 
                     <Text> {props.attributions.item.name} </Text>
                     <View style={styles.buttonHeader}>
-                        <View>
+                        <View style={{ marginRight: 5 }}>
                             <Button title="edit" />
                         </View>
                         <View>
-                            <Button title="delete" color="red" />
+                            <Button title="delete" color="red" onPress={deleteDesktop} />
                         </View>
                     </View>
                 </View>

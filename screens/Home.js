@@ -166,6 +166,18 @@ export default HomeScreen = ({ navigation }) => {
         }
     }
 
+    const deleteDesktopHandler = async (ordiId) => {
+        try {
+            await setDataOrdi(currentData => {
+                return currentData.filter((desktop) => desktop.id !== ordiId)
+            })
+            const desktopInfo = await Ordinateur.findByPk(ordiId);
+            await desktopInfo.destroy();
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     useEffect(() => {
         if(!mounted){
             getComputers(date);
@@ -196,7 +208,7 @@ export default HomeScreen = ({ navigation }) => {
             </View>
             <FlatList 
                 data={dataOrdi}
-                renderItem={itemData =>(<Desktop attributions={itemData} />)}
+                renderItem={itemData => (<Desktop attributions={itemData} onDelete={deleteDesktopHandler} />)}
                 keyExtractor={(item, index) => item.id.toString()}
             />
 
