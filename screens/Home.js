@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Button, View, StyleSheet, Platform } from 'react-native';
+import { Button, View, StyleSheet, Platform, FlatList } from 'react-native';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 import AddDesktop from "../components/AddDesktop";
+import Desktop  from "../components/Desktop";
 
 // Import for database
 import * as SQLite from 'expo-sqlite';
@@ -158,9 +159,8 @@ export default HomeScreen = ({ navigation }) => {
     const addDesktopHandler = async (name) => {
         try {
             const desktop = new Ordinateur({ name });
-            const newDesktop = await desktop.save();
+            await desktop.save();
             await getComputers(date);
-            await console.log(dataOrdi)
         } catch (error) {
             console.log(error)
         }
@@ -193,8 +193,13 @@ export default HomeScreen = ({ navigation }) => {
                 </View>
 
                 <AddDesktop addDesktop={addDesktopHandler} />
-
             </View>
+            <FlatList 
+                data={dataOrdi}
+                renderItem={itemData =>(<Desktop attributions={itemData} />)}
+                keyExtractor={(item, index) => item.id.toString()}
+            />
+
         </View>
         
     )
