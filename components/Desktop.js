@@ -15,6 +15,10 @@ export default Desktop = props => {
         setEditedDesktop(text)
     }
 
+    const refreshUp = () => {
+        props.refresh()
+    }
+
     const deleteDesktop = async () => {
         await setMounted(false);
         await props.onDelete(props.attributions.item.id)
@@ -35,51 +39,42 @@ export default Desktop = props => {
             const runFunctions = async () => {
                 try {
                     await setTimeslot([]);
-                    await setAttributions([]);
-                    await initialize();
-                    await displayHoraire();
+                    var attributionInfo = props.attributions.item.attributions;
+                    var attributionObject = {};
+
+                    if (attributionInfo.length != 0) {
+                        attributionInfo.forEach(element => {
+                            attributionObject[element.hours] = {
+                                id: element.client.id,
+                                surname: element.client.surname,
+                                name: element.client.name,
+                                idAssign: element.id
+                            }
+                        })
+                    }
+
+                    var timeslotInfo = [];
+
+                    for (let i = 0; i < 10; i++) {
+                        let hour = 8 + i;
+                        if (attributionObject[hour]) {
+                            timeslotInfo.push({
+                                hours: hour,
+                                client: `${attributionObject[hour].surname} ${attributionObject[hour].name}`,
+                                idAssign: attributionObject[hour].idAssign
+                            })
+                        } else {
+                            timeslotInfo.push({
+                                hours: hour,
+                                client: "",
+                            })
+                        }
+                    }
+
+                    await setTimeslot(timeslotInfo);
                     await setMounted(true)
                 } catch (error) {
                     console.log(error)
-                }
-            }
-
-            const initialize = async () => {
-                var attributionInfo = props.attributions.item.attributions;
-                var attributionObject = {};
-
-                if (attributionInfo.length != 0) {
-                    attributionInfo.forEach(element => {
-                        attributionObject[element.hours] = {
-                            id: element.Client.id,
-                            surname: element.Client.surname,
-                            name: element.Client.name,
-                            idAssign: element.id
-                        }
-                    })
-                }
-
-                await setAttributions(currentData => [...currentData, attributionObject])
-            }
-
-            const displayHoraire = async () => {
-                var arrayData = {};
-
-                for (let i = 8; i < 19; i++) {
-                    if (attributions[i]) {
-                        arrayData = {
-                            hours: i,
-                            client: attributions[i],
-                        }
-
-                        await setTimeslot(currentData => [...currentData, arrayData])
-                    } else {
-                        arrayData = {
-                            hours: i,
-                            client: ''
-                        }
-                        await setTimeslot(currentData => [...currentData, arrayData])
-                    }
                 }
             }
 
@@ -87,17 +82,6 @@ export default Desktop = props => {
         
         }
     }, [mounted])
-  
-
-    useEffect(() => {
-        const showData = () => {
-            console.log(props.attributions.item.attributions)
-            console.log(props.attributions)
-            console.log(timeslots)
-            console.log(attributions)
-        }
-        showData()
-    })
 
     return(
         <View style={{ marginBottom: 20 }}>
@@ -127,8 +111,8 @@ export default Desktop = props => {
                                 <View style={{ flexDirection: 'row', jusifyContent: 'flex-end' }}>
                                     {(
                                         item.client == "" 
-                                        ? <AddAttribution refresh={props.refresh} date={props.date} />
-                                        : <RemoveAttribution refresh={props.refresh} />
+                                        ? <AddAttribution refresh={refreshUp} date={props.date} hours={item.hours} ordinateurId={props.attributions.item.id} />
+                                        : <RemoveAttribution refresh={refreshUp} attributionId={item.idAssign} />
                                     )}
                                    
                                 </View>

@@ -159,6 +159,7 @@ export default HomeScreen = ({ navigation }) => {
 
     const refreshHome = async () => {
         try {
+            await setMounted(false);
             await getComputers(date, page);
         } catch (error) {
             console.log(error)

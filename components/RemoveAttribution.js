@@ -54,8 +54,19 @@ export default RemoveAttribution = props => {
         setVisible(!visible);
     };
 
-    const removeHandler = () => {
-        props.refresh()
+    const removeHandler = async () => {
+        try {
+            const attribution = await Attribution.findOne({
+                where: { id: props.attributionId }
+            });
+            if (attribution) {
+                await attribution.destroy();
+                await props.refresh()
+            }
+            await setVisible(!visible);
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
@@ -79,7 +90,7 @@ export default RemoveAttribution = props => {
 
                     <View style={styles.buttonContainer}>
                         <Button title="Annuler" onPress={toggleOverlay} buttonStyle={styles.buttonLeft} />
-                        <Button title="Valider" />
+                        <Button title="Valider" onPress={removeHandler} />
                     </View>
                 </View>
             </Overlay>
