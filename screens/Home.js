@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, View, StyleSheet, Platform, FlatList } from 'react-native';
+import { Icon } from 'react-native-elements';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 import AddDesktop from "../components/AddDesktop";
@@ -100,7 +101,7 @@ export default HomeScreen = ({ navigation }) => {
         const currentDate = selectedDate || date;
         setShow(Platform.OS === 'ios');
         setDate(currentDate);
-        getComputers(currentDate);
+        getComputers(currentDate, page);
     };
 
     const showMode = (currentMode) => {
@@ -112,11 +113,12 @@ export default HomeScreen = ({ navigation }) => {
         showMode('date');
     };
 
-    const getComputers = async( date ) =>{
+    const getComputers = async( date, chosenPage = null ) =>{
         try {
             // Define totalPage based on totalItem
-            const totalItem = await Ordinateur.findAndCountAll();
-            const totalPage = Math.ceil(totalItem.count / ITEM_PER_PAGE);
+            const totalItem  = await Ordinateur.findAndCountAll();
+            const totalPage  = Math.ceil(totalItem.count / ITEM_PER_PAGE);
+            const selectPage = chosenPage == null ? page : chosenPage;
 
             const desktopInfo = await Ordinateur.findAll({
                 attributes: ['id', 'name'],
@@ -137,19 +139,27 @@ export default HomeScreen = ({ navigation }) => {
                 ],
 
                 // Paginations informations
-                offset: (page - 1) * ITEM_PER_PAGE,
+                offset: (selectPage - 1) * ITEM_PER_PAGE,
                 limit: ITEM_PER_PAGE
             });
 
             await setDataOrdi(desktopInfo);
 
             await setPagination({
-                hasNextPage: ITEM_PER_PAGE * page < totalItem.count,
-                hasPreviousPage: page > 1,
-                nextPage: page + 1,
-                previousPage: page - 1,
+                hasNextPage: ITEM_PER_PAGE * selectPage < totalItem.count,
+                hasPreviousPage: selectPage > 1,
+                nextPage: selectPage + 1,
+                previousPage: selectPage - 1,
                 totalPage
             })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const refreshHome = async () => {
+        try {
+            await getComputers(date, page);
         } catch (error) {
             console.log(error)
         }
@@ -159,7 +169,7 @@ export default HomeScreen = ({ navigation }) => {
         try {
             const desktop = new Ordinateur({ name });
             await desktop.save();
-            await getComputers(date);
+            await getComputers(date, page);
         } catch (error) {
             console.log(error)
         }
@@ -170,7 +180,7 @@ export default HomeScreen = ({ navigation }) => {
             const desktopInfo = await Ordinateur.findByPk(ordiId);
             desktopInfo.name = name;
             await desktopInfo.save();
-            await getComputers(date);
+            await getComputers(date, page);
         } catch (error) {
             console.log(error)
         }
@@ -180,17 +190,31 @@ export default HomeScreen = ({ navigation }) => {
         try {
             const desktopInfo = await Ordinateur.findByPk(ordiId);
             await desktopInfo.destroy();
-            await getComputers(date);
-
+            await getComputers(date, page);
         } catch (error) {
             console.log(error)
+        }
+    }
+
+    const next = async () => {
+        if (pagination.hasNextPage) {
+            await setPage(pagination.nextPage);
+            await getComputers(date, pagination.nextPage);
+
+        }
+    }
+
+    const previous = async () => {
+        if (pagination.hasPreviousPage) {
+            await setPage(pagination.previousPage);
+            await getComputers(date, pagination.previousPage);
         }
     }
 
     useEffect(() => {
         if(!mounted){
             setDataOrdi([]);
-            getComputers(date);
+            getComputers(date, page);
             setMounted(true);
         }
     }, [mounted])
@@ -215,10 +239,21 @@ export default HomeScreen = ({ navigation }) => {
                 </View>
 
                 <AddDesktop addDesktop={addDesktopHandler} />
+
+            <View style={{ marginLeft: 20, flexDirection: 'row' }}>
+                <View style={{ marginLeft: 2, marginRight: 4 }}> 
+                    <Button title="<" onPress={previous} />
+                </View>
+                <View style={{ marginLeft: 2, marginRight: 2 }}> 
+                    <Button title=">" onPress={next} />
+                </View>
+            </View>
+               
+
             </View>
             <FlatList 
                 data={dataOrdi}
-                renderItem={itemData => (<Desktop attributions={itemData} onDelete={deleteDesktopHandler} onEdit={editDesktopHandler} />)}
+                renderItem={itemData => (<Desktop attributions={itemData} onDelete={deleteDesktopHandler} onEdit={editDesktopHandler} refresh={refreshHome} date={date} />)}
                 keyExtractor={(item, index) => item.id.toString()}
             />
 

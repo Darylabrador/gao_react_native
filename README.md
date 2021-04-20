@@ -45,3 +45,6 @@ En mode développment vous devez utiliser les commandes suivantes :
 - https://reactnativeelements.com/
 - https://reactnavigation.org/docs/navigating/
 - https://www.npmjs.com/package/rn-sequelize
+
+
+https://aboutreact.com/example-of-react-native-autocomplete-input/

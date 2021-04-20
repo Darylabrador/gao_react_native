@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Button, ScrollView} from 'react-native';
 import { Overlay, Input, Icon, Card} from 'react-native-elements';
+import AddAttribution from "../components/AddAttribution";
+import RemoveAttribution from "../components/RemoveAttribution";
 
 export default Desktop = props => {
     const [visible, setVisible] = useState(false);
@@ -101,7 +103,7 @@ export default Desktop = props => {
         <View style={{ marginBottom: 20 }}>
             <Card>
                 <View style={ styles.headerCard }> 
-                    <Text> {props.attributions.item.name} </Text>
+                    <Text style={{ fontWeight: 'bold' }}> {props.attributions.item.name} </Text>
                     <View style={styles.buttonHeader}>
                         <View style={{ marginRight: 5 }}>
                             <Button title="edit" onPress={toggleOverlay} />
@@ -115,9 +117,21 @@ export default Desktop = props => {
                 <View>
                     {timeslots.map((item, i) => 
                         (
-                            <View key={i} style={{ flexDirection: 'row', borderBottomColor: 'black', borderBottomWidth: 1, paddingBottom: 5, paddingTop: 5 }}>
-                                <Text> {item.hours}h </Text>
-                                <Text> {item.client} </Text>
+                            <View key={i} style={{ flexDirection: 'row', borderBottomColor: 'black', borderBottomWidth: 1, paddingBottom: 5, paddingTop: 5, alignItems: 'center' }}>
+                                <View style={{ width: "90%", flexDirection: 'row', alignItems: 'center' }}>
+                                    <Text> {item.hours}h </Text>
+                                    <View style={{ marginLeft: 5 }}>
+                                        <Text> {item.client} </Text>
+                                    </View>
+                                </View>
+                                <View style={{ flexDirection: 'row', jusifyContent: 'flex-end' }}>
+                                    {(
+                                        item.client == "" 
+                                        ? <AddAttribution refresh={props.refresh} date={props.date} />
+                                        : <RemoveAttribution refresh={props.refresh} />
+                                    )}
+                                   
+                                </View>
                             </View>
                         )
                     )}

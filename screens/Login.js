@@ -40,8 +40,8 @@ User.init(
 );
 
 export default Login = ({ navigation }) => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("admin@gmail.com");
+    const [password, setPassword] = useState("password");
 
     const onChangeEmail = (value) => {
         setEmail(value)
