@@ -46,8 +46,7 @@ class Ordinateur extends Model { }
 Ordinateur.init({
     name: {
         type: Sequelize.STRING,
-        allowNull: false,
-        unique: true
+        allowNull: false
     }
 }, {
     paranoid: true,
@@ -179,11 +178,10 @@ export default HomeScreen = ({ navigation }) => {
 
     const deleteDesktopHandler = async (ordiId) => {
         try {
-            await setDataOrdi(currentData => {
-                return currentData.filter((desktop) => desktop.id !== ordiId)
-            })
             const desktopInfo = await Ordinateur.findByPk(ordiId);
             await desktopInfo.destroy();
+            await getComputers(date);
+
         } catch (error) {
             console.log(error)
         }

@@ -65,8 +65,7 @@ class Ordinateur extends Model { }
 Ordinateur.init({
   name: {
     type: Sequelize.STRING,
-    allowNull: false,
-    unique: true
+    allowNull: false
   }
 }, {
   paranoid: true,
