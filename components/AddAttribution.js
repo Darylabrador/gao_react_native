@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Button, FlatList, TouchableOpacity } from 'react-native';
 import { Overlay, Input, Icon } from 'react-native-elements';
-import ProgressiveInput from 'react-native-progressive-input';
 
 // Import for database
 import * as SQLite from 'expo-sqlite';
@@ -77,12 +76,12 @@ export default AddAttribution = props => {
 
     const toggleOverlay = () => {
         setVisible(!visible);
+        setClientSearch("")
         setFind(true);
     };
 
     const searchClientHandler = async (text) => {
         try {
-            await setIsLoading(true);
             await setClientSearch(text)
             await searchClient()
         } catch (error) {
@@ -118,7 +117,7 @@ export default AddAttribution = props => {
                 await setClientInfo([])
             } else {
                 await setFind(true)
-                await setClientInfo(currentData => [...currentData, clientList])
+                await setClientInfo(clientList)
             }
         } catch (error) {
             console.log(error)
@@ -159,6 +158,14 @@ export default AddAttribution = props => {
         }
     }
 
+    const handleSelect = (item) => {
+        let selecText = `${item.name} ${item.surname}`;
+        console.log(selecText)
+        setSelectedValue(item);
+        setClientSearch(selecText.toString())
+        setClientInfo([])
+    }
+
     const nameHandler = (text) => {
         setClientName(text)
     }
@@ -192,21 +199,21 @@ export default AddAttribution = props => {
                                     value={clientSearch}
                                     onChangeText={searchClientHandler}
                                 />
+                            <View style={ styles.resultList }>
                               <FlatList
                                 keyExtractor={(item, index) => index.toString()}
                                     data={clientInfo}
                                     renderItem={itemData => (
-                                        <TouchableOpacity
-                                            onPress={() => {
-                                                setSelectedValue(item);
-                                                setClientInfo([]);
-                                            }}>
-                                            <Text style={styles.itemText}>
-                                                {itemData.name} {itemData.surname}
-                                            </Text>
+                                        <TouchableOpacity onPress={() => handleSelect(itemData.item)}>
+                                            <View style={styles.itemText }>
+                                                <Text>
+                                                {(itemData.item.name)} {(itemData.item.surname)}
+                                                </Text>
+                                            </View>
                                         </TouchableOpacity>
                                     )}
                                 />
+                            </View>
                         </View>
             
                         : <View>
@@ -271,10 +278,6 @@ const styles = StyleSheet.create({
         marginTop: 25,
         marginBottom: 25,
         width: 200,
-        top: 15,
-        bottom: 15,
-        left: 2,
-        position: 'absolute'
     },
     descriptionContainer: {
         justifyContent: 'center',
@@ -283,5 +286,7 @@ const styles = StyleSheet.create({
         paddingTop: 5,
         paddingBottom: 5,
         margin: 2,
+        borderBottomColor: 'black',
+        borderBottomWidth: 1
     },
 });
