@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+
+import { NavigationContainer, useNavigation  } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { Icon } from 'react-native-elements';
+import { View, TouchableOpacity } from 'react-native';
 
 import HomeScreen from './screens/Home';
 import Login from './screens/Login';
 
 import FlashMessage from "react-native-flash-message";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Import for database
 import * as SQLite from 'expo-sqlite';
@@ -103,9 +107,8 @@ Attribution.init(
   }
 );
 
-export default App = props => {
-  const Stack  = createStackNavigator();
-
+export default App = () => {
+  const Stack    = createStackNavigator();
     useEffect(() => {
       async function init() {
         try {
@@ -140,7 +143,10 @@ export default App = props => {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Espace culturel" component={Login} />
-        <Stack.Screen name="Accueil" component={HomeScreen} />
+        <Stack.Screen 
+          name="Accueil" 
+          component={HomeScreen} 
+        />
       </Stack.Navigator>
       <FlashMessage position="top" />
     </NavigationContainer>

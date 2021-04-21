@@ -26,10 +26,10 @@ Après avoir fait un git clone de ce projet, vous devez effectué les actions su
 
 - npm install
 
-## Contenu du .env
+## Obtenir l'apk
 
-Vous devez éditer les informations suivantes dans votre .env :
-
+Pour avoir l'apk, il faut utiliser la commande suivante :
+- 
 
 ## Lancement du projet 
 

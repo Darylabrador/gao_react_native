@@ -108,11 +108,21 @@ export default Desktop = props => {
                 <View style={ styles.headerCard }> 
                     <Text style={{ fontWeight: 'bold' }}> {props.attributions.item.name} </Text>
                     <View style={styles.buttonHeader}>
-                        <View style={{ marginRight: 5 }}>
-                            <Button title="edit" onPress={toggleOverlay} />
+                        <View style={{ marginRight: 10 }}>
+                            <Icon
+                                name='pencil'
+                                color='black'
+                                type='font-awesome'
+                                onPress={() => toggleOverlay()}
+                            />
                         </View>
                         <View>
-                            <Button title="delete" color="red" onPress={deleteDesktop} />
+                            <Icon
+                                name='trash'
+                                color='red'
+                                type='font-awesome'
+                                onPress={() => deleteDesktop()}
+                            />
                         </View>
                     </View>
                 </View>

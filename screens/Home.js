@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, View, StyleSheet, Platform, FlatList } from 'react-native';
+import { Button, View, StyleSheet, Platform, FlatList, TouchableOpacity } from 'react-native';
 import { Icon } from 'react-native-elements';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -7,6 +7,7 @@ import AddDesktop from "../components/AddDesktop";
 import Desktop  from "../components/Desktop";
 
 import { showMessage, hideMessage } from "react-native-flash-message";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Import for database
 import * as SQLite from 'expo-sqlite';
@@ -98,6 +99,16 @@ export default HomeScreen = ({ navigation }) => {
     const [page, setPage] = useState(1);
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
+
+    useEffect(() => {
+        const check = async () => {
+            const token = await AsyncStorage.getItem('gaoReactToken');
+            if (token != "connected") {
+                await navigation.navigate({ name: "Espace culturel" })
+            }
+        }
+        check()
+    })
 
     const onChangeDate = (event, selectedDate) => {
         const currentDate = selectedDate || date;
@@ -237,6 +248,15 @@ export default HomeScreen = ({ navigation }) => {
         }
     }, [mounted])
 
+    const disconnect = async () => {
+        try {
+            await AsyncStorage.removeItem('gaoReactToken');
+            await navigation.navigate({ name: "Espace culturel" })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return(
         <View style={styles.listItem}>
             <View style={styles.controlContainer}>
@@ -258,15 +278,25 @@ export default HomeScreen = ({ navigation }) => {
 
                 <AddDesktop addDesktop={addDesktopHandler} />
 
-            <View style={{ marginLeft: 20, flexDirection: 'row' }}>
-                <View style={{ marginLeft: 2, marginRight: 4 }}> 
-                    <Button title="<" onPress={previous} />
+                <View style={{ marginLeft: 20, flexDirection: 'row', marginRight: 50 }}>
+                    <View style={{ marginLeft: 2, marginRight: 4 }}> 
+                        <Button title="<" onPress={previous} />
+                    </View>
+                    <View style={{ marginLeft: 2, marginRight: 2 }}> 
+                        <Button title=">" onPress={next} />
+                    </View>
                 </View>
-                <View style={{ marginLeft: 2, marginRight: 2 }}> 
-                    <Button title=">" onPress={next} />
-                </View>
-            </View>
-               
+                
+                
+                <TouchableOpacity onPress={() => disconnect()}>
+                    <View style={{ padding: 10, flexDirection: 'row', justifyContent: 'flex-end' }} >
+                        <Icon
+                            name='rowing'
+                            name='sign-out'
+                            type='font-awesome'
+                        />
+                    </View>
+                </TouchableOpacity>
 
             </View>
             <FlatList 

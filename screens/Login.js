@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 
 import { showMessage, hideMessage } from "react-native-flash-message";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Import for database
 import * as SQLite from 'expo-sqlite';
@@ -42,8 +43,18 @@ User.init(
 );
 
 export default Login = ({ navigation }) => {
-    const [email, setEmail] = useState("admin@gmail.com");
-    const [password, setPassword] = useState("password");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    useEffect(() => {
+        const check = async () => {
+            const token = await AsyncStorage.getItem('gaoReactToken');
+            if (token == 'connected'){
+                await navigation.navigate({ name: "Accueil"})
+            }
+        }
+        check()
+    })
 
     const onChangeEmail = (value) => {
         setEmail(value)
@@ -69,9 +80,10 @@ export default Login = ({ navigation }) => {
                 type: "danger",
             });
         } else {
-            setEmail("")
-            setPassword("")
-            navigation.navigate('Accueil')
+            await setEmail("")
+            await setPassword("")
+            await AsyncStorage.setItem('gaoReactToken', "connected")
+            await navigation.navigate('Accueil')
         }
     }
 
@@ -81,7 +93,7 @@ export default Login = ({ navigation }) => {
                 <Input placeholder="email@address.com" type="email" value={email} onChangeText={onChangeEmail} />
             </View>
             <View style={styles.loginInput}>
-                <Input placeholder="Password" secureTextEntry={true} value={password} onChangeText={onChangePassword} />
+                <Input placeholder="Mot de passe" secureTextEntry={true} value={password} onChangeText={onChangePassword} />
             </View>
             <View style={styles.loginButton}>
                 <Button title="Se connecter" onPress={loginHandler} />
