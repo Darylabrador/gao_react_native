@@ -6,6 +6,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import AddDesktop from "../components/AddDesktop";
 import Desktop  from "../components/Desktop";
 
+import { showMessage, hideMessage } from "react-native-flash-message";
+
 // Import for database
 import * as SQLite from 'expo-sqlite';
 import Sequelize from "rn-sequelize";
@@ -153,7 +155,10 @@ export default HomeScreen = ({ navigation }) => {
                 totalPage
             })
         } catch (error) {
-            console.log(error)
+            showMessage({
+                message: "Une erreur est survenue",
+                type: "danger",
+            });
         }
     }
 
@@ -162,7 +167,10 @@ export default HomeScreen = ({ navigation }) => {
             await setMounted(false);
             await getComputers(date, page);
         } catch (error) {
-            console.log(error)
+            showMessage({
+                message: "Une erreur est survenue",
+                type: "danger",
+            });
         }
     }
 
@@ -172,7 +180,10 @@ export default HomeScreen = ({ navigation }) => {
             await desktop.save();
             await getComputers(date, page);
         } catch (error) {
-            console.log(error)
+            showMessage({
+                message: "Une erreur est survenue",
+                type: "danger",
+            });
         }
     }
 
@@ -183,7 +194,10 @@ export default HomeScreen = ({ navigation }) => {
             await desktopInfo.save();
             await getComputers(date, page);
         } catch (error) {
-            console.log(error)
+            showMessage({
+                message: "Une erreur est survenue",
+                type: "danger",
+            });
         }
     }
 
@@ -193,7 +207,10 @@ export default HomeScreen = ({ navigation }) => {
             await desktopInfo.destroy();
             await getComputers(date, page);
         } catch (error) {
-            console.log(error)
+            showMessage({
+                message: "Une erreur est survenue",
+                type: "danger",
+            });
         }
     }
 

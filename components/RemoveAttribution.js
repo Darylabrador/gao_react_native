@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 import { Overlay, Input, Icon } from 'react-native-elements';
 
+import { showMessage, hideMessage } from "react-native-flash-message";
+
 // Import for database
 import * as SQLite from 'expo-sqlite';
 import Sequelize from "rn-sequelize";
@@ -65,7 +67,10 @@ export default RemoveAttribution = props => {
             }
             await setVisible(!visible);
         } catch (error) {
-            console.log(error)
+            showMessage({
+                message: "Une erreur est survenue",
+                type: "danger",
+            });
         }
     }
 

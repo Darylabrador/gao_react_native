@@ -5,6 +5,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './screens/Home';
 import Login from './screens/Login';
 
+import FlashMessage from "react-native-flash-message";
+
 // Import for database
 import * as SQLite from 'expo-sqlite';
 import Sequelize from "rn-sequelize";
@@ -140,6 +142,7 @@ export default App = props => {
         <Stack.Screen name="Espace culturel" component={Login} />
         <Stack.Screen name="Accueil" component={HomeScreen} />
       </Stack.Navigator>
+      <FlashMessage position="top" />
     </NavigationContainer>
   )
 }

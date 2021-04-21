@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Button, FlatList, TouchableOpacity } from 'react-native';
 import { Overlay, Input, Icon } from 'react-native-elements';
 
+import { showMessage, hideMessage } from "react-native-flash-message";
+
 // Import for database
 import * as SQLite from 'expo-sqlite';
 import Sequelize from "rn-sequelize";
@@ -85,7 +87,10 @@ export default AddAttribution = props => {
             await setClientSearch(text)
             await searchClient()
         } catch (error) {
-            console.log(error)
+            showMessage({
+                message: "Oups pas client trouver",
+                type: "danger",
+            });
         }
     }
 
@@ -109,7 +114,6 @@ export default AddAttribution = props => {
                 }
             });
 
-            await console.log(clientList);
             await setClientInfo([]);
 
             if(clientList.length == 0) {
@@ -120,7 +124,10 @@ export default AddAttribution = props => {
                 await setClientInfo(clientList)
             }
         } catch (error) {
-            console.log(error)
+            showMessage({
+                message: "Oups pas client trouver",
+                type: "danger",
+            });
         }
     }
 
@@ -154,13 +161,15 @@ export default AddAttribution = props => {
             }
 
         } catch (error) {
-            console.log(error)
+            showMessage({
+                message: "Une erreur est survenue",
+                type: "danger",
+            });
         }
     }
 
     const handleSelect = (item) => {
         let selecText = `${item.name} ${item.surname}`;
-        console.log(selecText)
         setSelectedValue(item);
         setClientSearch(selecText.toString())
         setClientInfo([])

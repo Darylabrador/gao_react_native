@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 
+import { showMessage, hideMessage } from "react-native-flash-message";
+
 // Import for database
 import * as SQLite from 'expo-sqlite';
 import Sequelize from "rn-sequelize";
@@ -54,17 +56,23 @@ export default Login = ({ navigation }) => {
     const loginHandler = async () => {
         const userExist = await User.findOne({ where: { email } });
         if (!userExist) {
-            console.log('identifiants invalide')
+            showMessage({
+                message: "Identifiants invalide",
+                type: "danger",
+            });
         }
 
         const isEqual = password == userExist.password ? true : false;
         if (!isEqual) {
-            console.log('identifiants invalide')
+            showMessage({
+                message: "Identifiants invalide",
+                type: "danger",
+            });
+        } else {
+            setEmail("")
+            setPassword("")
+            navigation.navigate('Accueil')
         }
-
-        setEmail("")
-        setPassword("")
-        navigation.navigate('Accueil')
     }
 
     return (

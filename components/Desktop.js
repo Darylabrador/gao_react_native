@@ -4,6 +4,8 @@ import { Overlay, Input, Icon, Card} from 'react-native-elements';
 import AddAttribution from "../components/AddAttribution";
 import RemoveAttribution from "../components/RemoveAttribution";
 
+import { showMessage, hideMessage } from "react-native-flash-message";
+
 export default Desktop = props => {
     const [visible, setVisible] = useState(false);
     const [editedDesktop, setEditedDesktop] = useState(props.attributions.item.name);
@@ -20,14 +22,28 @@ export default Desktop = props => {
     }
 
     const deleteDesktop = async () => {
-        await setMounted(false);
-        await props.onDelete(props.attributions.item.id)
+        try {
+            await setMounted(false);
+            await props.onDelete(props.attributions.item.id)
+        } catch (error) {
+            showMessage({
+                message: "Une erreur est survenue",
+                type: "danger",
+            });
+        }
     }
 
     const editDesktopHandler = async () => {
-        await setMounted(false);
-        await props.onEdit(props.attributions.item.id, editedDesktop);
-        await setVisible(!visible);
+        try {
+            await setMounted(false);
+            await props.onEdit(props.attributions.item.id, editedDesktop);
+            await setVisible(!visible);
+        } catch (error) {
+            showMessage({
+                message: "Une erreur est survenue",
+                type: "danger",
+            });
+        }
     }
 
     const toggleOverlay = () => {
@@ -74,7 +90,10 @@ export default Desktop = props => {
                     await setTimeslot(timeslotInfo);
                     await setMounted(true)
                 } catch (error) {
-                    console.log(error)
+                    showMessage({
+                        message: "Une erreur est survenue",
+                        type: "danger",
+                    });
                 }
             }
 
