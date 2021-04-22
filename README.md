@@ -1,4 +1,4 @@
-# Projet market place "Miel Péi" 
+# Projet "GAO react native" 
 
 La conception et le développement de ce projet s'est effectué dans le cadre de la formation de Simplon. 
 
@@ -47,5 +47,10 @@ En mode développment vous devez utiliser les commandes suivantes :
 - https://reactnavigation.org/docs/navigating/
 - https://www.npmjs.com/package/rn-sequelize
 
+## APK 
+
+Vous pouvez retrouver l'APK sur la branch suivante : 
+
+<a href="https://github.com/Darylabrador/gao_react_native/tree/APK"> ici </a>
 
 https://aboutreact.com/example-of-react-native-autocomplete-input/
