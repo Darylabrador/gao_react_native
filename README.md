@@ -29,7 +29,8 @@ Après avoir fait un git clone de ce projet, vous devez effectué les actions su
 ## Obtenir l'apk
 
 Pour avoir l'apk, il faut utiliser la commande suivante :
-- 
+- expo build:android -t apk
+- expo build:ios
 
 ## Lancement du projet 
 
